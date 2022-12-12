@@ -18,12 +18,6 @@ class RuhtmlSpider(scrapy.Spider):
                 callback=self.save_pdf
             )
                 
-            
-
-        filename = f'ruhtml-{page}.html'
-        with open(filename, 'wb') as f:
-            f.write(response.body)
-        self.log(f'Saved file {filename}')
 
     def save_pdf(self, response):
         filename = response.url.split("/")[-1]
