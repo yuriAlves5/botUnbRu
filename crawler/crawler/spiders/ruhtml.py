@@ -11,8 +11,10 @@ class RuhtmlSpider(scrapy.Spider):
 
     def parse(self, response):
         page = response.url.split("/")[-2]
-        pdfs = 'a[href$=".pdf"]::attr(href)'
-        for href in response.css(pdfs).extract():
+        pdfs = '//a[contains(@href, "Gama_")]/@href'
+        # pdfs = 'a[href$=".pdf"]::attr(href)'
+        for href in response.xpath(pdfs).getall():
+            self.log(href)
             yield Request(
                 url=response.urljoin(href),
                 callback=self.save_pdf
@@ -23,4 +25,3 @@ class RuhtmlSpider(scrapy.Spider):
         filename = response.url.split("/")[-1]
         with open(filename, 'wb') as f:
             f.write(response.body)
-        self.log(f'Saved file {filename}')
